@@ -1,127 +1,112 @@
 <template>
     <div>
-        
-   
       <v-container>
-        <v-row>
-         
-          <v-col cols="12">
+         <v-row>
             <v-autocomplete
-              v-model="friends"
-              :disabled="isUpdating"
-              :items="people"
-              filled
-              chips
-              color="blue-grey lighten-2"
-              label="Select"
-              item-text="name"
-              item-value="name"
-              multiple
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  @click="data.select"
-                  @click:close="remove(data.item)"
+                v-model="friends"
+                :disabled="isUpdating"
+                :items="people"
+                filled
+                chips
+                color="blue-grey lighten-2"
+                label="Select"
+                item-text="name"
+                item-value="name"
+                multiple
                 >
-                  <v-avatar left>
-                    <v-img :src="data.item.avatar"></v-img>
-                  </v-avatar>
-                  {{ data.item.name }}
-                </v-chip>
-              </template>
-              <template v-slot:item="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item"></v-list-item-content>
-                </template>
-                <template v-else>
-                  <v-list-item-avatar>
-                    <img :src="data.item.avatar">
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                    <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </template>
+                 <template v-slot:selection="data">
+                                <v-chip
+                                v-bind="data.attrs"
+                                :input-value="data.selected"
+                                close
+                                @click="data.select"
+                                @click:close="remove(data.item)"
+                                >
+                                <v-avatar left>
+                                    <v-img :src="data.item.avatar"></v-img>
+                                </v-avatar>
+                                {{ data.item.name }}
+                                </v-chip>
+                            </template>
+                               <template v-slot:item="data">
+                                <template v-if="typeof data.item !== 'object'">
+                                <v-list-item-content v-text="data.item"></v-list-item-content>
+                                </template>
+                                <template v-else>
+                                <v-list-item-avatar>
+                                    <img :src="data.item.avatar">
+                                </v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                    <v-list-item-subtitle v-html="data.item.group"></v-list-item-subtitle>
+                                </v-list-item-content>
+                                </template>
+                            </template>
             </v-autocomplete>
-          </v-col>
-          
-        </v-row>
-        <v-row>
-           <v-col
-        class="d-flex"
-        cols="12"
-        sm="4"
-      >
-        <v-select
-          :items="items"
-          label="Year"
-        ></v-select>
-      </v-col>
-      <v-col
-        class="d-flex"
-        cols="12"
-        sm="4"
-      >
-        <v-select
-          :items="items"
-          label="Semi-Monthly"
-        ></v-select>
-      </v-col>
-     <v-col
-      cols="12"
-      sm="4"
-      md="4"
-    >
-      <v-menu
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        :return-value.sync="date"
-        transition="scale-transition"
-        offset-y
-        min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="dateRangeText"
-            label="Date range"
-            prepend-icon="mdi-calendar"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker
-          v-model="dates"
-            range
-          no-title
-          scrollable
-        >
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="primary"
-            @click="menu = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            text
-            color="primary"
-            @click="$refs.menu.save(date)"
-          >
-            OK
-          </v-btn>
-        </v-date-picker>
-      </v-menu>
-    </v-col>
-        </v-row>
+         </v-row>
+         <v-row>
+            <v-col
+                        class="d-flex"
+                        cols="12"
+                        sm="4"
+                    >
+                        <v-select
+                        :items="year"
+                        label="Year"
+                        ></v-select>
+                    </v-col>
+                  
+                     <v-col
+                    cols="12"
+                    sm="4"
+                    md="4"
+                    >
+                    <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="date"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            v-model="dateRangeText"
+                            label="Date range"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                        ></v-text-field>
+                        </template>
+                        <v-date-picker
+                        v-model="dates"
+                            range
+                        no-title
+                        scrollable
+                        >
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text
+                            color="primary"
+                            @click="menu = false"
+                        >
+                            Cancel
+                        </v-btn>
+                        <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(date)"
+                        >
+                            OK
+                        </v-btn>
+                        </v-date-picker>
+                    </v-menu>
+                </v-col>
+         </v-row>
       </v-container>
-   
+      
     <v-divider></v-divider>
     <v-card-actions>
       
@@ -150,7 +135,12 @@
        Download
       </v-btn>
     </v-card-actions>
-  
+   <v-data-table
+      :headers="headers"
+      :items="desserts"
+      :items-per-page="5"
+      class="elevation-1"
+    ></v-data-table>
     </div>
 </template>
 
@@ -167,6 +157,59 @@
       }
 
       return {
+        headers: [
+        {
+          text: 'EMP ID',
+          align: 'start',
+          sortable: false,
+          value: 'ID',
+        },
+        { text: 'Name', value: 'name' },
+        { text: 'Days Worked', value: 'worked' },
+        { text: 'Absents', value: 'absents' },
+        { text: 'Undertime', value: 'undertime' },
+        { text: 'Overtime', value: 'overtime' },
+        { text: 'Details', value: 'details' },
+      ],
+      desserts: [
+        {
+          ID: '1223121',
+          name: 'Cardo Dalisay',
+          worked: 159,
+          absents: 6.0,
+          undertime: 24,
+          overtime: 4.0,
+          details: 'With Med Cert',
+        },
+         {
+          ID: '12231222',
+          name: 'Joffrey Baratheon',
+          worked: 159,
+          absents: 6.0,
+          undertime: 24,
+          overtime: 4.0,
+          details: 'With Med Cert',
+        },
+         {
+          ID: '12223123',
+          name: 'Jon Snow',
+          worked: 159,
+          absents: 6.0,
+          undertime: 24,
+          overtime: 4.0,
+          details: 'With Med Cert',
+        },
+         {
+          ID: '12323124',
+          name: 'Daenerys Targaryen',
+          worked: 159,
+          absents: 6.0,
+          undertime: 24,
+          overtime: 4.0,
+          details: 'With Med Cert',
+        },
+   
+      ],
            dates: ['2019-09-10', '2019-09-20'],
         autoUpdate: true,
         friends: ['Sandra Adams', 'Britta Holt'],
@@ -186,6 +229,12 @@
           { name: 'Sandra Williams', group: 'Group 2', avatar: srcs[3] },
         ],
         title: 'The summer breeze',
+        year :['2021', '2022'],
+        cycle :['Semi-monthly', 'Monthly'],
+
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      menu: false,
+      modal: false,
       }
     },
 

@@ -106,14 +106,24 @@ export default {
         },
        
         {
-          icon: '',
+          icon: 'mdi-account',
           title: 'Employee',
           to: '/Employee'
         },
          {
-          icon: '',
+          icon: 'mdi-printer',
           title: 'DTR',
           to: '/dtr_by_employee'
+        },
+         {
+          icon: 'mdi-logout',
+          title: 'Logout',
+          to: '/dtr_by_employee'
+        },
+         {
+          icon: '',
+          title: 'Test',
+          to: '/test'
         }
       ],
       miniVariant: false,
