@@ -14,6 +14,13 @@
           >
             Users List
           </a>
+          <br>
+          <a
+            href="/users/jeryy"
+            class="button--green"
+          >
+            Add Jerry
+          </a>
         </div>
       </div>
       <div class="links">
@@ -31,7 +38,7 @@
           rel="noopener noreferrer"
           class="button--grey"
         >
-          GitHub
+          GitHub wow
         </a>
       </div>
     </div>
@@ -40,12 +47,20 @@
 
 <script>
 export default {
-  async asyncData ({ $http }) {
-    const test = await $http.$get('/api/test')
-    return {
-      test
-    }
+  data:()=>({
+    test:''
+  }),
+
+    async fetch () {
+    this.test = await this.$http.$get('/api/test')
   }
+  // async asyncData ({ $http }) {
+  //   const test = await $http.$get('/api/test')
+  //   return {
+  //     test
+  //   }
+  // }
+
 }
 </script>
 

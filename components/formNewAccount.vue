@@ -1,6 +1,7 @@
 <template>
-<div id="app">
 
+<div id="app">
+  {{test}}
    <v-container class="grey lighten-5">
       <v-row no-gutters>
         <v-col
@@ -12,12 +13,13 @@
             outlined
             tile
           >
-            <form>
+            <form @submit.prevent="submitForm">
               <v-text-field
                 v-model="name"
                 :error-messages="nameErrors"
                 :counter="10"
                 label="Fist name"
+                name="fname"
                 required
                 @input="$v.name.$touch()"
                 @blur="$v.name.$touch()"
@@ -75,6 +77,7 @@
               <v-btn @click="clear">
                 clear
               </v-btn>
+             
             </form>
           </v-card>
         </v-col>
@@ -94,11 +97,16 @@
             lazy-src="https://as2.ftcdn.net/v2/jpg/03/32/59/65/1000_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg"
             max-height="300"
             max-width="500"
-            src="https://as2.ftcdn.net/v2/jpg/03/32/59/65/1000_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg"
+            :src="imageUrl"
           ></v-img>
             <v-file-input class="bg-height"
                 show-size
                 truncate-length="17"
+                v-model="image" 
+                type="file" 
+                label="Upload Profile Picture" 
+                hint="Add a picture of your Profile" 
+                outlined dense @change="onFileChange"
               ></v-file-input>
           </v-card>
         </v-col>
@@ -111,24 +119,29 @@
 <script>
 
 import { required, maxLength, email } from 'vuelidate/lib/validators'
-import {validationMixin} from 'vuelidate'
+import { validationMixin } from 'vuelidate'
+
+
 export default {
- name: 'formNewAccount',
- 
+
+
+  name: 'FormNewAccount',
   mixins: [validationMixin],
 
   validations: {
     name: { required, maxLength: maxLength(10) },
     email: { required, email },
-    select: { required },
-    checkbox: {
-      checked (val) {
-        return val
-      },
-    },
+    // select: { required },
+    // checkbox: {
+    //   checked (val) {
+    //     return val
+    //   }
+    // }
   },
-
-  data: () => ({
+  
+  data(){
+    return{
+  
     name: '',
     email: '',
     select: null,
@@ -139,21 +152,33 @@ export default {
     //   'Item 4',
     // ],
     checkbox: false,
-  }),
-
+     test:'',
+    image: undefined,
+      // to save image url
+    imageUrl: ''
+   
+    }
+   
+  }
+  ,
+   async fetch () {
+    this.test = await this.$http.$get('/api/test')
+    console.log(this.test)
+  },
+  
   computed: {
-    checkboxErrors () {
-      const errors = []
-      if (!this.$v.checkbox.$dirty) return errors
-      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-      return errors
-    },
-    selectErrors () {
-      const errors = []
-      if (!this.$v.select.$dirty) return errors
-      !this.$v.select.required && errors.push('Item is required')
-      return errors
-    },
+    // checkboxErrors () {
+    //   const errors = []
+    //   if (!this.$v.checkbox.$dirty) return errors
+    //   !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+    //   return errors
+    // },
+    // selectErrors () {
+    //   const errors = []
+    //   if (!this.$v.select.$dirty) return errors 
+    //   !this.$v.select.required && errors.push('Item is required')
+    //   return errors
+    // },
     nameErrors () {
       const errors = []
       if (!this.$v.name.$dirty) return errors
@@ -167,12 +192,35 @@ export default {
       !this.$v.email.email && errors.push('Must be valid e-mail')
       !this.$v.email.required && errors.push('E-mail is required')
       return errors
-    },
+    }
   },
 
   methods: {
-    submit () {
+     async submit () {
       this.$v.$touch()
+      if (!this.$v.$invalid) {
+          const data = await this.$http.$post('/api/users', { name: this.name, email: this.email, image:this.image }, {
+          debug: true,
+          retry: 2,
+          serverTimeout: 5000
+          })
+          this.test=data
+      }
+     },
+      createImage(file) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        this.imageUrl = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    },
+    onFileChange(file) {
+      if (!file) {
+        return;
+      }
+      this.createImage(file);
+      
     },
     clear () {
       this.$v.$reset()
@@ -180,8 +228,9 @@ export default {
       this.email = ''
       this.select = null
       this.checkbox = false
-    },
-  },
+    }
+  }
+
 }
 </script>
 
@@ -205,4 +254,5 @@ export default {
    }
     
   }
+
 </style>

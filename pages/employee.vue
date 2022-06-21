@@ -65,13 +65,11 @@ import formEmploymentDetails from '@/components/formEmploymentDetails.vue'
 
 export default {
   name: 'InspirePage',
-
-
- components:{
-   formNewAccount,
-   formPersonalInfo,
-   formEmploymentDetails
- },
+  components: {
+    formNewAccount,
+    formPersonalInfo,
+    formEmploymentDetails
+  },
   data(){
 
     return {
@@ -98,9 +96,10 @@ export default {
     
 },
 methods:{
-
-}
-
+  submit(){
+    alert("wewe")
+  }
+},
 }
 </script>
 <style lang="scss" scoped>
